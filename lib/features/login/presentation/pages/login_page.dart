@@ -1,4 +1,6 @@
+import 'package:acinema_flutter_project/features/login/data/models/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -63,9 +65,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       hintText: "Ваш номер телефону",
                       hintStyle:
-                          TextStyle(fontFamily: "FixelText", fontSize: 12),
+                      TextStyle(fontFamily: "FixelText", fontSize: 12),
                       errorStyle:
-                          TextStyle(fontFamily: "FixelText", fontSize: 12)),
+                      TextStyle(fontFamily: "FixelText", fontSize: 12)),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return "Введіть номер телефону, будь ласка";
@@ -86,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: 200,
                 child: ElevatedButton(
                     onPressed: () =>
-                        {if (_loginFormKey.currentState!.validate()) {}},
+                    {if (_loginFormKey.currentState!.validate()) {}},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
@@ -105,7 +107,14 @@ class _LoginPageState extends State<LoginPage> {
                 width: 200,
                 height: 30,
                 child: OutlinedButton(
-                    onPressed: () => {},
+                    onPressed: () async => {
+                          Fluttertoast.showToast(
+                              msg: await DeviceInfo.getId(),
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              fontSize: 16.0)
+                        },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
