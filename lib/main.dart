@@ -1,4 +1,4 @@
-import 'package:acinema_flutter_project/features/login/presentation/pages/login_page.dart';
+import 'package:acinema_flutter_project/core/main_navigation.dart';
 import 'package:flutter/material.dart';
 
 import 'core/color_schemes.g.dart';
@@ -15,8 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'ACinema',
       theme: ThemeData(/*useMaterial3: true,*/ colorScheme: lightColorScheme),
-      darkTheme: ThemeData(/*useMaterial3: true,*/ colorScheme: darkColorScheme),
-      home: const LoginPage(),//const MyHomePage(title: 'Кінопокази'),
+      darkTheme: ThemeData(
+          /*useMaterial3: true,*/
+          colorScheme: darkColorScheme),
+      home: const MainNavigation(), //const MyHomePage(title: 'Кінопокази'),
     );
   }
 }
