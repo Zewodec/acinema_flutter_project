@@ -4,6 +4,7 @@ import 'package:acinema_flutter_project/features/login/data/interceptors/login_i
 import 'package:acinema_flutter_project/features/login/data/models/device_info.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import 'login_storage.dart';
 
@@ -24,16 +25,31 @@ class LoginAPI {
     await LoginStorage.setSessionToken(sessionToken);
   }
 
-  Future<bool> dioGetSessionToken() async {
-    final response = await _dio.post(
-      _sessionTokenURL,
-    );
+  Future<String> dioGetSessionToken(var context) async {
+    try {
+      final response = await _dio.post(
+        _sessionTokenURL,
+      );
 
-    if (response.statusCode == 200) {
-      await _saveSessionTokenFromURL(response.data);
-      return true;
+      if (response.statusCode == 200) {
+        await _saveSessionTokenFromURL(response.data);
+        return "OK";
+      }
+      return "Error Getting Session Toket From API";
+    } on DioError catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Помилка при отриманні токену сесії.\n${e.response?.data ?? "Error"}',
+            style:
+                const TextStyle(fontFamily: "FixelText", color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 6),
+        ),
+      );
+      return "Error Getting Session Toket From API";
     }
-    return false;
   }
 
   Future<String> _getSignature() async {
@@ -61,16 +77,48 @@ class LoginAPI {
 
   final String _accessTokenURL = "$_hostAPI/api/auth/token";
 
-  Future<bool> dioGetAccessToken() async {
-    final response = await _dio.post(
-      _accessTokenURL,
-      data: await _loginForAccessToken,
-    );
+  Future<String> dioGetAccessToken(var context) async {
+    try {
+      final response = await _dio.post(
+        _accessTokenURL,
+        data: await _loginForAccessToken,
+      );
 
-    if (response.statusCode == 200) {
-      await _saveAccessTokenFromURL(response.data);
-      return true;
+      if (response.statusCode == 200) {
+        await _saveAccessTokenFromURL(response.data);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Успішна авторизація.',
+                style: TextStyle(fontFamily: "FixelText", color: Colors.white)),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return "OK";
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Помилка при авторизації.',
+              style: TextStyle(fontFamily: "FixelText", color: Colors.white)),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+
+      return "BAD";
+    } on DioError catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Помилка при авторизації.\n${e.response?.data ?? "Error"}',
+            style:
+                const TextStyle(fontFamily: "FixelText", color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 6),
+        ),
+      );
+      return e.response?.data ?? "Error";
     }
-    return false;
   }
 }

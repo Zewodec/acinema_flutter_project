@@ -55,4 +55,9 @@ class LoginStorage {
 
     return prefs.getString(_accessTokenKey);
   }
+
+  static Future<void> clearSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
 }

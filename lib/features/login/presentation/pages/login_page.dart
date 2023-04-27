@@ -1,8 +1,5 @@
 import 'package:acinema_flutter_project/features/login/data/datasource/login_api.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../data/datasource/login_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,7 +12,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   late TextEditingController _phoneNumberFieldController;
 
-  final LoginAPI loginAPI = LoginAPI();
+  late LoginAPI loginAPI;
 
   // String _phoneNumber = "";
 
@@ -23,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     _phoneNumberFieldController = TextEditingController();
     _phoneNumberFieldController.text = "+38";
+    loginAPI = LoginAPI();
     super.initState();
   }
 
@@ -77,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                       return "Введіть номер телефону, будь ласка";
                     }
                     // Check if the phone number has the correct length and starts with the correct prefix
-                    if (RegExp(r'^\+380\d{9}$').hasMatch(value)) {
+                    if (RegExp(r'^\+\d{1,3}\s?\d{3,14}$').hasMatch(value)) {
                       return null; // Return null if the input is valid
                     } else {
                       return 'Введіть коректно номер телефону'; // Return an error message if the input is invalid
@@ -112,17 +110,10 @@ class _LoginPageState extends State<LoginPage> {
                 width: 200,
                 height: 35,
                 child: OutlinedButton(
-                    onPressed: () async => {
-                          loginAPI
-                              .dioGetSessionToken()
-                              .whenComplete(() => loginAPI.dioGetAccessToken()),
-                          Fluttertoast.showToast(
-                              msg: await LoginStorage.getAccessToken() ??
-                                  "No Access Token",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              fontSize: 16.0)
+                    onPressed: () async =>
+                    {
+                          loginAPI.dioGetSessionToken(context).whenComplete(
+                              () => loginAPI.dioGetAccessToken(context)),
                         },
                     child: const Text(
                       "Авторизуватись як гість ",
