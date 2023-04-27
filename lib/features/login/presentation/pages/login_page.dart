@@ -1,6 +1,8 @@
-import 'package:acinema_flutter_project/features/login/data/models/device_info.dart';
+import 'package:acinema_flutter_project/features/login/data/datasource/login_api.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../data/datasource/login_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,6 +14,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   late TextEditingController _phoneNumberFieldController;
+
+  final LoginAPI loginAPI = LoginAPI();
 
   // String _phoneNumber = "";
 
@@ -92,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
+                        // Auth by Phone
                         Text(
                           "Авторизуватись за ",
                           style: TextStyle(fontFamily: "FixelText"),
@@ -105,11 +110,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(
                 width: 200,
-                height: 30,
+                height: 35,
                 child: OutlinedButton(
                     onPressed: () async => {
+                          loginAPI.dioGetAccessToken(),
                           Fluttertoast.showToast(
-                              msg: await DeviceInfo.getId(),
+                              msg: await LoginStorage.getSessionToken() ??
+                                  "No Session Token",
                               toastLength: Toast.LENGTH_LONG,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
@@ -118,12 +125,11 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
+                        // Auth by guest
                         Text(
                           "Авторизуватись як гість ",
-                          style: TextStyle(
-                              fontFamily: "FixelText",
-                              fontSize: 11,
-                              fontStyle: FontStyle.italic),
+                          style:
+                              TextStyle(fontFamily: "FixelText", fontSize: 12),
                         ),
                         Icon(Icons.people)
                       ],
