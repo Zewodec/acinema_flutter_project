@@ -24,7 +24,7 @@ class LoginAPI {
     await LoginStorage.setSessionToken(sessionToken);
   }
 
-  Future<bool> _dioGetSessionToken() async {
+  Future<bool> dioGetSessionToken() async {
     final response = await _dio.post(
       _sessionTokenURL,
     );
@@ -41,7 +41,7 @@ class LoginAPI {
     String? sessionToken = await LoginStorage.getSessionToken();
 
     if (sessionToken != null && sessionToken.isNotEmpty) {
-      var encodeSignature = utf8.encode(secretKey + sessionToken);
+      var encodeSignature = utf8.encode(sessionToken + secretKey);
       var signature = sha256.convert(encodeSignature);
       return signature.toString();
     }
@@ -55,17 +55,16 @@ class LoginAPI {
       };
 
   Future<void> _saveAccessTokenFromURL(Map<String, dynamic> data) async {
-    final accessToken = data['data']['accessToken'];
+    final accessToken = data['data']['sessionToken'];
     await LoginStorage.setAccessToken(accessToken);
   }
 
   final String _accessTokenURL = "$_hostAPI/api/auth/token";
 
   Future<bool> dioGetAccessToken() async {
-    _dioGetSessionToken;
     final response = await _dio.post(
       _accessTokenURL,
-      data: _loginForAccessToken,
+      data: await _loginForAccessToken,
     );
 
     if (response.statusCode == 200) {

@@ -69,9 +69,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       hintText: "Ваш номер телефону",
                       hintStyle:
-                      TextStyle(fontFamily: "FixelText", fontSize: 12),
+                          TextStyle(fontFamily: "FixelText", fontSize: 12),
                       errorStyle:
-                      TextStyle(fontFamily: "FixelText", fontSize: 12)),
+                          TextStyle(fontFamily: "FixelText", fontSize: 12)),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return "Введіть номер телефону, будь ласка";
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: 200,
                 child: ElevatedButton(
                     onPressed: () =>
-                    {if (_loginFormKey.currentState!.validate()) {}},
+                        {if (_loginFormKey.currentState!.validate()) {}},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
@@ -113,26 +113,21 @@ class _LoginPageState extends State<LoginPage> {
                 height: 35,
                 child: OutlinedButton(
                     onPressed: () async => {
-                          loginAPI.dioGetAccessToken(),
+                          loginAPI
+                              .dioGetSessionToken()
+                              .whenComplete(() => loginAPI.dioGetAccessToken()),
                           Fluttertoast.showToast(
-                              msg: await LoginStorage.getSessionToken() ??
-                                  "No Session Token",
-                              toastLength: Toast.LENGTH_LONG,
+                              msg: await LoginStorage.getAccessToken() ??
+                                  "No Access Token",
+                              toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
                               fontSize: 16.0)
                         },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        // Auth by guest
-                        Text(
-                          "Авторизуватись як гість ",
-                          style:
-                              TextStyle(fontFamily: "FixelText", fontSize: 12),
-                        ),
-                        Icon(Icons.people)
-                      ],
+                    child: const Text(
+                      "Авторизуватись як гість ",
+                      style: TextStyle(fontFamily: "FixelText", fontSize: 12),
+                      textAlign: TextAlign.center,
                     )),
               ),
             ],
