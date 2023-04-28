@@ -5,16 +5,16 @@ import 'package:device_info_plus/device_info_plus.dart';
 class DeviceInfo {
   /// *
   /// Returns unique Android Device ID
-  static Future<String> getId() async {
+  static Future<int> getId() async {
     try {
       var deviceInfo = DeviceInfoPlugin();
       if (Platform.isAndroid) {
         var androidDeviceInfo = await deviceInfo.androidInfo;
-        return androidDeviceInfo.id;
+        return androidDeviceInfo.id.hashCode;
       }
     } catch (error) {
-      return "Err0rID";
+      return 0;
     }
-    return "Err0rID2";
+    return 1;
   }
 }

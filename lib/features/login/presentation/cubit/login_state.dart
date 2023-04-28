@@ -9,4 +9,10 @@ class LoginSignIn extends LoginState {}
 
 class LoginSuccess extends LoginState {}
 
-class LoginError extends LoginState {}
+class LoginError extends LoginState {
+  LoginError(this.errorMessage);
+
+  final String errorMessage;
+
+// String get errorMessage => _errorMessage;
+}

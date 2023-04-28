@@ -1,8 +1,13 @@
-import 'package:acinema_flutter_project/features/login/presentation/bloc/login_cubit.dart';
+import 'package:acinema_flutter_project/features/login/data/repository/login_repository.dart';
+import 'package:acinema_flutter_project/features/login/presentation/cubit/login_cubit.dart';
 import 'package:acinema_flutter_project/features/movies/movies_page.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:page_transition/page_transition.dart';
+
+import '../../core/interceptors/accept_language_interseptor.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,12 +20,15 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   late TextEditingController _phoneNumberFieldController;
   late LoginCubit loginCubit;
+  final getIt = GetIt.instance;
 
   @override
   void initState() {
     _phoneNumberFieldController = TextEditingController();
     _phoneNumberFieldController.text = "+38";
-    loginCubit = LoginCubit();
+    getIt.registerSingleton<LoginRepository>(
+        LoginRepository(Dio()..interceptors.add(AcceptLanguageInterceptor())));
+    loginCubit = LoginCubit(GetIt.I<LoginRepository>());
     super.initState();
   }
 
@@ -35,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Авторизація",
+          "Authorization",
           style: TextStyle(fontFamily: "FixelDisplay"),
         ),
       ),
@@ -46,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Text(
-                "Авторизація",
+                "Authorization",
                 style: TextStyle(
                   fontFamily: "FixelDisplay",
                   fontSize: 30,
@@ -61,24 +69,24 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _phoneNumberFieldController,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
-                      labelText: "Номер телефону",
+                      labelText: "Phone Number",
                       labelStyle: TextStyle(
                         fontFamily: "FixelDisplay",
                       ),
-                      hintText: "Ваш номер телефону",
+                      hintText: "Yours Phone Number",
                       hintStyle:
-                      TextStyle(fontFamily: "FixelText", fontSize: 12),
+                          TextStyle(fontFamily: "FixelText", fontSize: 12),
                       errorStyle:
-                      TextStyle(fontFamily: "FixelText", fontSize: 12)),
+                          TextStyle(fontFamily: "FixelText", fontSize: 12)),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Введіть номер телефону, будь ласка";
+                      return "Please Enter phone number";
                     }
                     // Check if the phone number has the correct length and starts with the correct prefix
                     if (RegExp(r'^\+\d{1,3}\s?\d{6,14}$').hasMatch(value)) {
                       return null; // Return null if the input is valid
                     } else {
-                      return 'Введіть коректно номер телефону'; // Return an error message if the input is invalid
+                      return 'Check entered phone number'; // Return an error message if the input is invalid
                     }
                   },
                 ),
@@ -96,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: const [
                         // Auth by Phone
                         Text(
-                          "Авторизуватись за ",
+                          "Sign in with ",
                           style: TextStyle(fontFamily: "FixelText"),
                         ),
                         Icon(Icons.phone)
@@ -108,9 +116,9 @@ class _LoginPageState extends State<LoginPage> {
                 width: 200,
                 height: 35,
                 child: OutlinedButton(
-                  onPressed: () => {loginCubit.SignIn()},
+                  onPressed: () => {loginCubit.signIn()},
                   child: const Text(
-                    "Авторизуватись як гість ",
+                    "Sign in as guest ",
                     style: TextStyle(fontFamily: "FixelText", fontSize: 12),
                     textAlign: TextAlign.center,
                   ),
@@ -121,12 +129,13 @@ class _LoginPageState extends State<LoginPage> {
                 bloc: loginCubit,
                 listener: (context, state) {
                   if (state is LoginError) {
+                    String errorMessage = state.errorMessage;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         backgroundColor: Colors.redAccent,
                         content: Text(
-                          "Error on Sing in Process!",
-                          style: TextStyle(
+                          "Error on Sing in Process!\n$errorMessage",
+                          style: const TextStyle(
                               fontFamily: "FixelDisplay", color: Colors.white),
                         ),
                       ),
@@ -143,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                 builder: (context, state) {
                   if (state is LoginSignIn) {
                     return const CircularProgressIndicator(
-                      color: Colors.amber,
+                      color: Colors.green,
                     );
                   }
                   return const Text("");

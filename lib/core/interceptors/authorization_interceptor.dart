@@ -8,7 +8,6 @@ class AuthInterceptor extends Interceptor {
     final accessToken = await TokenLocalDataSource.getAccessToken();
 
     if (accessToken != null && accessToken.isNotEmpty) {
-      options.headers['Accept-Language'] = 'uk';
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 

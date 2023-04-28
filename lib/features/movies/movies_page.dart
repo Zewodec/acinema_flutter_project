@@ -1,3 +1,4 @@
+import 'package:acinema_flutter_project/features/login/data/data_source/token_local_datasource.dart';
 import 'package:flutter/material.dart';
 
 class MoviesPage extends StatefulWidget {
@@ -8,17 +9,33 @@ class MoviesPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<MoviesPage> {
+  String sasTok = "";
+  String acasTok = "";
+
+  Future<void> getSessionToken() async {
+    sasTok = (await TokenLocalDataSource.getSessionToken())!;
+    acasTok = (await TokenLocalDataSource.getAccessToken())!;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Movies"),
+        title: const Text("Movies"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text("Hello Movies!"),
+          children: [
+            FutureBuilder(
+                future: getSessionToken(),
+                builder: (context, snapshot) =>
+                    Text("Session Token:$sasTok\nAccessToken:$acasTok")),
           ],
         ),
       ),

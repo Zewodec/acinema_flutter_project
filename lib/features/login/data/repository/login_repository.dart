@@ -20,7 +20,7 @@ class LoginRepository {
     await TokenLocalDataSource.setSessionToken(sessionToken);
   }
 
-  Future<String> dioGetSessionToken(var context) async {
+  Future<String> dioGetSessionToken() async {
     if (await TokenLocalDataSource.isSavedSessionToken()) {
       return "Already Exist Session Token";
     }
@@ -68,7 +68,7 @@ class LoginRepository {
 
   final String _accessTokenURL = "$_hostAPI/api/auth/token";
 
-  Future<String> dioGetAccessToken(var context) async {
+  Future<String?> dioGetAccessToken() async {
     if (await TokenLocalDataSource.isSavedAccessToken()) {
       return "Already Exist Access Token";
     }
@@ -80,11 +80,11 @@ class LoginRepository {
 
       if (response.statusCode == 200) {
         await _saveAccessTokenFromURL(response.data);
-        return "OK";
+        return null;
       }
-      return "BAD";
+      return "Error: Problem in getting Access Token";
     } on DioError catch (e) {
-      return e.response?.data ?? "Error";
+      return e.message ?? "Error";
     }
   }
 }
