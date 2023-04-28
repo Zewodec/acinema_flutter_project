@@ -9,7 +9,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   void checkIfUserAuthorized() async {
     try {
-      if (await TokenLocalDataSource.isSavedSessionToken()) {
+      if (await TokenLocalDataSource.isSavedSessionToken() &&
+          await TokenLocalDataSource.isSavedAccessToken()) {
         Future.delayed(const Duration(seconds: 2))
             .then((value) => emit(Authorized()));
       } else {
