@@ -13,6 +13,15 @@ class MoviesPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<MoviesPage> {
+  late MoviesCubit moviesCubit;
+
+  @override
+  void initState() {
+    moviesCubit = MoviesCubit(MovieRepository(Dio()));
+    moviesCubit.loadMovies();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,47 +44,50 @@ class _MoviesPageState extends State<MoviesPage> {
               ),
             ),
           ),
-          BlocProvider<MoviesCubit>(
-            create: (context) => MoviesCubit(MovieRepository(Dio())),
-            child: Expanded(
-              child: BlocConsumer<MoviesCubit, MoviesState>(
-                listener: (context, state) {
-                  if (state is MoviesError) {
+          BlocConsumer<MoviesCubit, MoviesState>(
+            bloc: moviesCubit,
+            listener: (context, state) {
+              if (state is MoviesError) {
+                Future.delayed(const Duration(seconds: 1)).then((value) =>
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.redAccent,
                         content: Text(
-                      "MoviesError State:${state.errorMessage}",
-                      style: const TextStyle(fontFamily: "FixelText"),
-                    )));
-                  }
-                },
-                builder: (context, state) {
-                  if (state is MoviesLoading) {
-                    return const CircularProgressIndicator(
-                      color: Colors.green,
-                    );
-                  } else if (state is MoviesLoaded) {
-                    return GridView.builder(
-                      itemCount: state.movies.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.7,
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return MovieCard(movie: state.movies[index]);
-                      },
-                    );
-                  }
-                  return const Text(
-                    "Error in getting Movies",
-                    style: TextStyle(
-                        fontFamily: "FixelDisplay",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.redAccent),
-                  );
-                },
-              ),
-            ),
+                          "MoviesError State:${state.errorMessage}",
+                          style: const TextStyle(
+                              fontFamily: "FixelText", color: Colors.white),
+                        ))));
+              }
+            },
+            builder: (context, state) {
+              if (state is MoviesLoading) {
+                return const CircularProgressIndicator(
+                  color: Colors.green,
+                );
+              } else if (state is MoviesLoaded) {
+                return Expanded(
+                  child: GridView.builder(
+                    itemCount: state.movies.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.7,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return MovieCard(movie: state.movies[index]);
+                    },
+                  ),
+                );
+              }
+              Future.delayed(const Duration(seconds: 20))
+                  .then((value) => moviesCubit.loadMovies());
+              return const Text(
+                "Error in getting Movies",
+                style: TextStyle(
+                    fontFamily: "FixelDisplay",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.redAccent),
+              );
+            },
           ),
         ],
       ),

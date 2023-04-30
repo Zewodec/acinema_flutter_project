@@ -33,7 +33,7 @@ class MovieCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie.name,
+                      "${movie.name} (${movie.year})",
                       style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
