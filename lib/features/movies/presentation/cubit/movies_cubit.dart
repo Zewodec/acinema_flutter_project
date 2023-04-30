@@ -12,5 +12,26 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   final MovieRepository repository;
 
-  void loadMovies() async {}
+  void loadMovies() async {
+    emit(MoviesLoading());
+
+    final moviesData = await repository.dioGetAllMovies();
+
+    if (moviesData.containsKey("error") &&
+        moviesData['error'].toString().isNotEmpty &&
+        moviesData['error'] != null) {
+      emit(MoviesError(moviesData['error']));
+      return;
+    } else if (moviesData.containsKey("error") &&
+        (moviesData['error'].toString().isEmpty ||
+            moviesData['error'] == null)) {
+      emit(MoviesError(
+          "Something went wrong when getting movies getting error!"));
+      return;
+    }
+
+    final movies = MovieModelImpl.fromJson(moviesData);
+
+    emit(MoviesLoaded(movies.data));
+  }
 }
