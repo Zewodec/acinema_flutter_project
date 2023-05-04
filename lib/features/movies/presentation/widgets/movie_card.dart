@@ -1,5 +1,7 @@
 import 'package:acinema_flutter_project/features/movies/data/models/movie_model.dart';
+import 'package:acinema_flutter_project/features/movies/movie_card_page.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard({Key? key, required this.movie}) : super(key: key);
@@ -12,7 +14,13 @@ class MovieCard extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          //TODO: Implement movie details page
+          Navigator.push(
+              context,
+              PageTransition(
+                  child: MovieCardPage(
+                    movie: movie,
+                  ),
+                  type: PageTransitionType.bottomToTop));
         },
         child: Stack(
           children: [

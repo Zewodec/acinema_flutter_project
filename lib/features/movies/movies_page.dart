@@ -48,14 +48,18 @@ class _MoviesPageState extends State<MoviesPage> {
             bloc: moviesCubit,
             listener: (context, state) {
               if (state is MoviesError) {
-                Future.delayed(const Duration(seconds: 1)).then((value) =>
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.redAccent,
-                        content: Text(
-                          "MoviesError State:${state.errorMessage}",
-                          style: const TextStyle(
-                              fontFamily: "FixelText", color: Colors.white),
-                        ))));
+                Future.delayed(const Duration(seconds: 1)).then(
+                  (value) => ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.redAccent,
+                      content: Text(
+                        "MoviesError State:${state.errorMessage}",
+                        style: const TextStyle(
+                            fontFamily: "FixelText", color: Colors.white),
+                      ),
+                    ),
+                  ),
+                );
               }
             },
             builder: (context, state) {
@@ -81,7 +85,7 @@ class _MoviesPageState extends State<MoviesPage> {
               Future.delayed(const Duration(seconds: 20))
                   .then((value) => moviesCubit.loadMovies());
               return const Text(
-                "Error in getting Movies",
+                "Error in getting Movies\nCheck internet connection ;)",
                 style: TextStyle(
                     fontFamily: "FixelDisplay",
                     fontWeight: FontWeight.bold,

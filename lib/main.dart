@@ -14,10 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ACinema',
-      theme: ThemeData(/*useMaterial3: true,*/ colorScheme: lightColorScheme),
-      darkTheme: ThemeData(
-          /*useMaterial3: true,*/
-          colorScheme: darkColorScheme),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       home: const MainNavigation(), //const MyHomePage(title: 'Кінопокази'),
     );
   }
