@@ -14,12 +14,20 @@ class MoviesPage extends StatefulWidget {
 
 class _MoviesPageState extends State<MoviesPage> {
   late MoviesCubit moviesCubit;
+  late TextEditingController _searchFieldController;
 
   @override
   void initState() {
+    _searchFieldController = TextEditingController();
     moviesCubit = MoviesCubit(MovieRepository(Dio()));
     moviesCubit.loadMovies();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchFieldController.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,13 +39,20 @@ class _MoviesPageState extends State<MoviesPage> {
           style: TextStyle(
               fontFamily: "FixelDisplay", fontWeight: FontWeight.w600),
         ),
+        actions: [
+          IconButton(onPressed: () => {}, icon: const Icon(Icons.date_range))
+        ],
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: TextField(
-              decoration: InputDecoration(
+              controller: _searchFieldController,
+              onEditingComplete: () => {
+                moviesCubit.loadMoviesWithSearch(_searchFieldController.text)
+              },
+              decoration: const InputDecoration(
                 hintText: 'Search',
                 hintStyle: TextStyle(fontFamily: "FixelText"),
                 border: OutlineInputBorder(),
@@ -51,7 +66,8 @@ class _MoviesPageState extends State<MoviesPage> {
                 Future.delayed(const Duration(seconds: 1)).then(
                   (value) => ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      backgroundColor: Colors.redAccent,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.errorContainer,
                       content: Text(
                         "MoviesError State:${state.errorMessage}",
                         style: const TextStyle(

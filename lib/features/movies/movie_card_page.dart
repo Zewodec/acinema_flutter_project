@@ -252,14 +252,17 @@ class MovieCardPage extends StatelessWidget {
     try {
       await launchUrl(trailerURL, mode: LaunchMode.externalApplication);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
           backgroundColor: Theme.of(context).colorScheme.error,
           content: Text(
             "Can't open trailer!\n$e",
             style: TextStyle(
                 fontFamily: "FixelText",
                 color: Theme.of(context).colorScheme.onError),
-          )));
+          ),
+        ),
+      );
     }
   }
 }

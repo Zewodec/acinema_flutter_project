@@ -27,4 +27,40 @@ class MovieRepository {
     }
     return {"error": "Unexpected error while getting all movies!"};
   }
+
+  Future<Map<String, dynamic>> dioGetMoviesBySearch(
+      String searchMovieName) async {
+    String moviesListWithSearchParameterURL =
+        "$_moviesListURL?query=$searchMovieName";
+    try {
+      final response = await _dio.get(moviesListWithSearchParameterURL);
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } on DioError catch (e) {
+      return {"error": "Error getting movies with search:\n${e.message}"};
+    }
+    return {
+      "error": "Unexpected error while getting movies with search parameter!"
+    };
+  }
+
+  Future<Map<String, dynamic>> dioGetMoviesByDate(
+      String searchMovieDate) async {
+    String moviesListWithDateParameterURL =
+        "$_moviesListURL?date=$searchMovieDate";
+    try {
+      final response = await _dio.get(moviesListWithDateParameterURL);
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } on DioError catch (e) {
+      return {"error": "Error getting movies by date:\n${e.message}"};
+    }
+    return {
+      "error": "Unexpected error while getting movies with date parameter!"
+    };
+  }
 }

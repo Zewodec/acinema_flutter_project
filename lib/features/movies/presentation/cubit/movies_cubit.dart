@@ -17,21 +17,56 @@ class MoviesCubit extends Cubit<MoviesState> {
 
     final moviesData = await repository.dioGetAllMovies();
 
-    if (moviesData.containsKey("error") &&
-        moviesData['error'].toString().isNotEmpty &&
-        moviesData['error'] != null) {
-      emit(MoviesError(moviesData['error']));
-      return;
-    } else if (moviesData.containsKey("error") &&
-        (moviesData['error'].toString().isEmpty ||
-            moviesData['error'] == null)) {
-      emit(MoviesError(
-          "Something went wrong when getting movies getting error!"));
+    if (isErrorInData(moviesData)) {
       return;
     }
 
     final movies = MovieModelImpl.fromJson(moviesData);
 
     emit(MoviesLoaded(movies.data));
+  }
+
+  void loadMoviesWithSearch(String searchMovieName) async {
+    emit(MoviesLoading());
+
+    final moviesData = await repository.dioGetMoviesBySearch(searchMovieName);
+
+    if (isErrorInData(moviesData)) {
+      return;
+    }
+
+    final movies = MovieModelImpl.fromJson(moviesData);
+
+    emit(MoviesLoaded(movies.data));
+  }
+
+  void loadMoviesWithDate(String searchMovieDate) async {
+    emit(MoviesLoading());
+
+    final moviesData = await repository.dioGetMoviesByDate(searchMovieDate);
+
+    if (isErrorInData(moviesData)) {
+      return;
+    }
+
+    final movies = MovieModelImpl.fromJson(moviesData);
+
+    emit(MoviesLoaded(movies.data));
+  }
+
+  bool isErrorInData(Map<String, dynamic> moviesData) {
+    if (moviesData.containsKey("error") &&
+        moviesData['error'].toString().isNotEmpty &&
+        moviesData['error'] != null) {
+      emit(MoviesError(moviesData['error']));
+      return true;
+    } else if (moviesData.containsKey("error") &&
+        (moviesData['error'].toString().isEmpty ||
+            moviesData['error'] == null)) {
+      emit(MoviesError(
+          "Something went wrong when getting movies getting error!"));
+      return true;
+    }
+    return false;
   }
 }
