@@ -20,7 +20,8 @@ class MovieCard extends StatelessWidget {
                   child: MovieCardPage(
                     movie: movie,
                   ),
-                  type: PageTransitionType.bottomToTop));
+                  type: PageTransitionType.bottomToTop,
+                  duration: const Duration(milliseconds: 300)));
         },
         child: Stack(
           children: [

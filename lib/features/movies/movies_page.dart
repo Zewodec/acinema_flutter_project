@@ -30,6 +30,8 @@ class _MoviesPageState extends State<MoviesPage> {
     super.dispose();
   }
 
+  DateTime dateTime = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +42,22 @@ class _MoviesPageState extends State<MoviesPage> {
               fontFamily: "FixelDisplay", fontWeight: FontWeight.w600),
         ),
         actions: [
-          IconButton(onPressed: () => {}, icon: const Icon(Icons.date_range))
+          IconButton(
+              onPressed: () async {
+                DateTime? newDate = await showDatePicker(
+                    context: context,
+                    initialDate: dateTime,
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2025));
+                if (newDate == null) return;
+
+                setState(() {
+                  dateTime = newDate;
+                });
+                moviesCubit.loadMoviesWithDate(
+                    "${newDate.year}-${newDate.month}-${newDate.day}");
+              },
+              icon: const Icon(Icons.date_range))
         ],
       ),
       body: Column(
@@ -88,16 +105,19 @@ class _MoviesPageState extends State<MoviesPage> {
                   child: GridView.builder(
                     itemCount: state.movies.length,
                     gridDelegate:
+                    // Show cars as grid on page
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.7,
                     ),
                     itemBuilder: (BuildContext context, int index) {
+                      // Returns movie card on page
                       return MovieCard(movie: state.movies[index]);
                     },
                   ),
                 );
               }
+              // Reload Every 20 seconds for getting movies
               Future.delayed(const Duration(seconds: 20))
                   .then((value) => moviesCubit.loadMovies());
               return const Text(
