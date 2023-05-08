@@ -84,7 +84,7 @@ class LoginRepository {
       }
       return "Error: Problem in getting Access Token";
     } on DioError catch (e) {
-      return e.message ?? "Error";
+      return e.response?.data['data']['error'] ?? e.message ?? "Error";
     }
   }
 }

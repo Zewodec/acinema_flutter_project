@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _phoneNumberFieldController.dispose();
+    getIt.unregister<LoginRepository>();
     super.dispose();
   }
 

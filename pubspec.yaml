@@ -44,6 +44,7 @@ dependencies:
   equatable: ^2.0.5
   get_it: ^7.3.0
   page_transition: ^2.0.9
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
