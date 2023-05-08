@@ -28,28 +28,17 @@ class MovieRepository {
     return {"error": "Unexpected error while getting all movies!"};
   }
 
-  Future<Map<String, dynamic>> dioGetMoviesBySearch(
-      String searchMovieName) async {
-    String moviesListWithSearchParameterURL =
-        "$_moviesListURL?query=$searchMovieName";
-    try {
-      final response = await _dio.get(moviesListWithSearchParameterURL);
-
-      if (response.statusCode == 200) {
-        return response.data;
-      }
-    } on DioError catch (e) {
-      return {"error": "Error getting movies with search:\n${e.message}"};
+  Future<Map<String, dynamic>> dioGetMoviesByDateOrQuery(
+      String? searchMovieDate, String searchMovieName) async {
+    String moviesListWithDateParameterURL = _moviesListURL;
+    if (searchMovieDate != null && searchMovieName.isNotEmpty) {
+      moviesListWithDateParameterURL +=
+          "?date=$searchMovieDate&query=$searchMovieName";
+    } else if (searchMovieDate != null) {
+      moviesListWithDateParameterURL += "?date=$searchMovieDate";
+    } else if (searchMovieName.isNotEmpty) {
+      moviesListWithDateParameterURL += "?query=$searchMovieName";
     }
-    return {
-      "error": "Unexpected error while getting movies with search parameter!"
-    };
-  }
-
-  Future<Map<String, dynamic>> dioGetMoviesByDate(
-      String searchMovieDate) async {
-    String moviesListWithDateParameterURL =
-        "$_moviesListURL?date=$searchMovieDate";
     try {
       final response = await _dio.get(moviesListWithDateParameterURL);
 
@@ -57,10 +46,8 @@ class MovieRepository {
         return response.data;
       }
     } on DioError catch (e) {
-      return {"error": "Error getting movies by date:\n${e.message}"};
+      return {"error": "Error getting movies with parameters:\n${e.message}"};
     }
-    return {
-      "error": "Unexpected error while getting movies with date parameter!"
-    };
+    return {"error": "Unexpected error while getting movies with parameters!"};
   }
 }

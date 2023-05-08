@@ -49,13 +49,18 @@ class _MoviesPageState extends State<MoviesPage> {
                     initialDate: dateTime,
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2025));
-                if (newDate == null) return;
+                if (newDate == null) {
+                  moviesCubit.loadMoviesWithDateOrName(
+                      null, _searchFieldController.text);
+                  return;
+                }
 
                 setState(() {
                   dateTime = newDate;
                 });
-                moviesCubit.loadMoviesWithDate(
-                    "${newDate.year}-${newDate.month}-${newDate.day}");
+                moviesCubit.loadMoviesWithDateOrName(
+                    "${newDate.year}-${newDate.month}-${newDate.day}",
+                    _searchFieldController.text);
               },
               icon: const Icon(Icons.date_range))
         ],
@@ -66,8 +71,14 @@ class _MoviesPageState extends State<MoviesPage> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               controller: _searchFieldController,
-              onEditingComplete: () => {
-                moviesCubit.loadMoviesWithSearch(_searchFieldController.text)
+              onEditingComplete: () {
+                String? dateString =
+                    "${dateTime.year}-${dateTime.month}-${dateTime.day}";
+                if (_searchFieldController.text.isEmpty) {
+                  dateString = null;
+                }
+                moviesCubit.loadMoviesWithDateOrName(
+                    dateString, _searchFieldController.text);
               },
               decoration: const InputDecoration(
                 hintText: 'Search',

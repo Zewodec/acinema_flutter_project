@@ -1,18 +1,20 @@
 import 'dart:convert';
 
-MovieSessions movieSessionsFromJson(String str) =>
-    MovieSessions.fromJson(json.decode(str));
+MovieSessionsImpl movieSessionsFromJson(String str) =>
+    MovieSessionsImpl.fromJson(json.decode(str));
 
-String movieSessionsToJson(MovieSessions data) => json.encode(data.toJson());
+String movieSessionsToJson(MovieSessionsImpl data) =>
+    json.encode(data.toJson());
 
-class MovieSessions {
+class MovieSessionsImpl {
   List<MovieSessionModel> data;
 
-  MovieSessions({
+  MovieSessionsImpl({
     required this.data,
   });
 
-  factory MovieSessions.fromJson(Map<String, dynamic> json) => MovieSessions(
+  factory MovieSessionsImpl.fromJson(Map<String, dynamic> json) =>
+      MovieSessionsImpl(
         data: List<MovieSessionModel>.from(
             json["data"].map((x) => MovieSessionModel.fromJson(x))),
       );

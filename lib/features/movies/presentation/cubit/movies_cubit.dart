@@ -26,24 +26,12 @@ class MoviesCubit extends Cubit<MoviesState> {
     emit(MoviesLoaded(movies.data));
   }
 
-  void loadMoviesWithSearch(String searchMovieName) async {
+  void loadMoviesWithDateOrName(
+      String? searchMovieDate, String searchMovieName) async {
     emit(MoviesLoading());
 
-    final moviesData = await repository.dioGetMoviesBySearch(searchMovieName);
-
-    if (isErrorInData(moviesData)) {
-      return;
-    }
-
-    final movies = MovieModelImpl.fromJson(moviesData);
-
-    emit(MoviesLoaded(movies.data));
-  }
-
-  void loadMoviesWithDate(String searchMovieDate) async {
-    emit(MoviesLoading());
-
-    final moviesData = await repository.dioGetMoviesByDate(searchMovieDate);
+    final moviesData = await repository.dioGetMoviesByDateOrQuery(
+        searchMovieDate, searchMovieName);
 
     if (isErrorInData(moviesData)) {
       return;
