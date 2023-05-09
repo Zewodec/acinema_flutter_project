@@ -13,6 +13,18 @@ class MovieSessionsImpl {
     required this.data,
   });
 
+  void sortFromNewToOld() {
+    for (int i = 0; i < data.length - 1; i++) {
+      for (int j = 0; j < data.length - 1; j++) {
+        if (data[j].date > data[j + 1].date) {
+          var temp = data[j].date;
+          data[j].date = data[j + 1].date;
+          data[j + 1].date = temp;
+        }
+      }
+    }
+  }
+
   factory MovieSessionsImpl.fromJson(Map<String, dynamic> json) =>
       MovieSessionsImpl(
         data: List<MovieSessionModel>.from(

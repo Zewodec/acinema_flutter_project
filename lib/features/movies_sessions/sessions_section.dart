@@ -21,9 +21,8 @@ class _SessionSectionState extends State<SessionSection> {
 
   @override
   void initState() {
-    ;
     sessionsCubit = SessionsCubit(MovieSessionsRepository(Dio()));
-    sessionsCubit.loadSessions(widget.movieId, widget.date);
+    sessionsCubit.loadSessionsForNext3Days(widget.movieId, widget.date);
     super.initState();
   }
 

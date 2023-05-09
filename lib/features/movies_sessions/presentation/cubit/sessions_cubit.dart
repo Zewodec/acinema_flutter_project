@@ -26,6 +26,42 @@ class SessionsCubit extends Cubit<SessionsState> {
     emit(SessionsLoaded(sessions.data));
   }
 
+  void loadSessionsForNext3Days(String movieId, DateTime? date) async {
+    emit(SessionsLoading());
+
+    Map<String, dynamic> sessionsData = {};
+
+    var gotSessionData = await repository.dioGetSessions(
+        movieId, DateTime(date!.year, date.month, date.day));
+    sessionsData.addAll(gotSessionData);
+    if (isErrorInData(sessionsData)) {
+      return;
+    }
+
+    MovieSessionsImpl sessions = MovieSessionsImpl.fromJson(sessionsData);
+
+    for (int i = 1; i <= 3; i++) {
+      gotSessionData = await repository.dioGetSessions(
+          movieId, DateTime(date.year, date.month, date.day + i));
+      if (isErrorInData(gotSessionData)) {
+        return;
+      }
+      MovieSessionsImpl tempSeesionsModel =
+          MovieSessionsImpl.fromJson(gotSessionData);
+      sessions.data.addAll(tempSeesionsModel.data);
+    }
+
+    int milisecSinceEpoch = date.millisecondsSinceEpoch;
+    int currentTimeStamp = (milisecSinceEpoch / 1000).floor();
+
+    sessions.data.removeWhere(
+        (element) => element.date < currentTimeStamp ? true : false);
+
+    sessions.sortFromNewToOld();
+
+    emit(SessionsLoaded(sessions.data));
+  }
+
   bool isErrorInData(Map<String, dynamic> sessionsData) {
     if (sessionsData.containsKey("error") &&
         sessionsData['error'].toString().isNotEmpty &&
