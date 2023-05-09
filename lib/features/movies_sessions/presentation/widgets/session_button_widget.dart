@@ -18,22 +18,23 @@ class SessionButtonWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "${dateTime.day}-${dateTime.month}",
-            style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: "FixelDisplay",
-                color: Colors.greenAccent),
+            "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}",
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: "FixelDisplay",
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
           ),
           const SizedBox(
             width: 80,
           ),
           Text(
-            "${dateTime.hour}:${dateTime.minute}",
-            style: const TextStyle(
+            "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}",
+            style: TextStyle(
                 fontSize: 14.0,
                 fontFamily: "FixelDisplay",
-                color: Colors.greenAccent),
+                color: Theme.of(context).colorScheme.onPrimaryContainer),
           ),
         ],
       ),

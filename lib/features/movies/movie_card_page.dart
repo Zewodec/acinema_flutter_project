@@ -7,8 +7,9 @@ import 'data/models/movie_model.dart';
 
 class MovieCardPage extends StatefulWidget {
   final MovieModel movie;
+  final DateTime? date;
 
-  const MovieCardPage({super.key, required this.movie});
+  const MovieCardPage({super.key, required this.movie, this.date});
 
   @override
   State<MovieCardPage> createState() => _MovieCardPageState();
@@ -54,13 +55,7 @@ class _MovieCardPageState extends State<MovieCardPage>
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              actions: [
-                IconButton(
-                  onPressed: () => _launchTrailerUrl(
-                      context, Uri.parse(widget.movie.trailer)),
-                  icon: const Icon(Icons.camera_indoor),
-                ),
-              ],
+              actions: [],
               expandedHeight: 300,
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.network(
@@ -74,7 +69,7 @@ class _MovieCardPageState extends State<MovieCardPage>
         body: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            _buildMovieSessionTab(),
+            _buildMovieSessionTab(widget.movie.id.toString(), widget.date),
             _buildMovieDescriptionTab(),
           ],
         ),
@@ -88,6 +83,42 @@ class _MovieCardPageState extends State<MovieCardPage>
         SliverList(
           delegate: SliverChildListDelegate(
             [
+              const SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 50.0, right: 50),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      fixedSize: const Size(100, 50),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.tertiaryContainer),
+                  onPressed: () => _launchTrailerUrl(
+                      context, Uri.parse(widget.movie.trailer)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.camera_indoor,
+                        color:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
+                      ),
+                      Text(
+                        "Watch Trailer!",
+                        style: TextStyle(
+                            fontFamily: "FixelText",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onTertiaryContainer),
+                      )
+                    ],
+                  ),
+                ),
+              ),
               MovieDescriptionWidget(movie: widget.movie),
             ],
           ),
@@ -114,15 +145,16 @@ class _MovieCardPageState extends State<MovieCardPage>
     }
   }
 
-  Widget _buildMovieSessionTab() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: const [
-            SessionSection(),
-          ],
-        ),
+  Widget _buildMovieSessionTab(String movieId, DateTime? date) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, left: 4),
+      child: Column(
+        children: [
+          SessionSection(
+            movieId: movieId,
+            date: date,
+          ),
+        ],
       ),
     );
   }

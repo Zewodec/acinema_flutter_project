@@ -46,23 +46,24 @@ class _MoviesPageState extends State<MoviesPage> {
               onPressed: () async {
                 DateTime? newDate = await showDatePicker(
                     context: context,
-                    initialDate: dateTime,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2025));
+                  initialDate: dateTime,
+                  firstDate: DateTime(2023, 05, 01),
+                  lastDate: DateTime(2025));
                 if (newDate == null) {
                   moviesCubit.loadMoviesWithDateOrName(
                       null, _searchFieldController.text);
-                  return;
-                }
+                return;
+              }
 
-                setState(() {
-                  dateTime = newDate;
-                });
-                moviesCubit.loadMoviesWithDateOrName(
-                    "${newDate.year}-${newDate.month}-${newDate.day}",
-                    _searchFieldController.text);
-              },
-              icon: const Icon(Icons.date_range))
+              setState(() {
+                dateTime = newDate;
+              });
+              moviesCubit.loadMoviesWithDateOrName(
+                  "${newDate.year}-${newDate.month}-${newDate.day}",
+                  _searchFieldController.text);
+            },
+            icon: const Icon(Icons.date_range),
+          )
         ],
       ),
       body: Column(
@@ -123,7 +124,10 @@ class _MoviesPageState extends State<MoviesPage> {
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       // Returns movie card on page
-                      return MovieCard(movie: state.movies[index]);
+                      return MovieCard(
+                        movie: state.movies[index],
+                        date: dateTime,
+                      );
                     },
                   ),
                 );
