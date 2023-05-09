@@ -47,7 +47,7 @@ class _MoviesPageState extends State<MoviesPage> {
                 DateTime? newDate = await showDatePicker(
                     context: context,
                     initialDate: dateTime,
-                    firstDate: DateTime(2020),
+                    firstDate: DateTime.now(),
                     lastDate: DateTime(2025));
                 if (newDate == null) {
                   moviesCubit.loadMoviesWithDateOrName(

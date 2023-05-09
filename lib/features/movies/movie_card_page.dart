@@ -1,4 +1,5 @@
 import 'package:acinema_flutter_project/features/movies/presentation/widgets/movie_description_widget.dart';
+import 'package:acinema_flutter_project/features/movies_sessions/sessions_section.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -114,10 +115,14 @@ class _MovieCardPageState extends State<MovieCardPage>
   }
 
   Widget _buildMovieSessionTab() {
-    return const SafeArea(
+    return SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text("AJajjajajaja"),
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: const [
+            SessionSection(),
+          ],
+        ),
       ),
     );
   }
