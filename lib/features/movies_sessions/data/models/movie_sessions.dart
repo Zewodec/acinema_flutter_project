@@ -13,6 +13,18 @@ class MovieSessionsImpl {
     required this.data,
   });
 
+  void sortFromNewToOld() {
+    for (int i = 0; i < data.length - 1; i++) {
+      for (int j = 0; j < data.length - 1; j++) {
+        if (data[j].date > data[j + 1].date) {
+          var temp = data[j].date;
+          data[j].date = data[j + 1].date;
+          data[j + 1].date = temp;
+        }
+      }
+    }
+  }
+
   factory MovieSessionsImpl.fromJson(Map<String, dynamic> json) =>
       MovieSessionsImpl(
         data: List<MovieSessionModel>.from(
@@ -60,7 +72,7 @@ class MovieSessionModel {
 class Room {
   int id;
   String name;
-  List<Row> rows;
+  List<RoomRow> rows;
 
   Room({
     required this.id,
@@ -71,7 +83,7 @@ class Room {
   factory Room.fromJson(Map<String, dynamic> json) => Room(
         id: json["id"],
         name: json["name"],
-        rows: List<Row>.from(json["rows"].map((x) => Row.fromJson(x))),
+        rows: List<RoomRow>.from(json["rows"].map((x) => RoomRow.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -81,18 +93,18 @@ class Room {
       };
 }
 
-class Row {
+class RoomRow {
   int id;
   int index;
   List<Seat> seats;
 
-  Row({
+  RoomRow({
     required this.id,
     required this.index,
     required this.seats,
   });
 
-  factory Row.fromJson(Map<String, dynamic> json) => Row(
+  factory RoomRow.fromJson(Map<String, dynamic> json) => RoomRow(
         id: json["id"],
         index: json["index"],
         seats: List<Seat>.from(json["seats"].map((x) => Seat.fromJson(x))),

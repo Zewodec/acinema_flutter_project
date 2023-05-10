@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 class MovieCard extends StatelessWidget {
-  const MovieCard({Key? key, required this.movie}) : super(key: key);
+  const MovieCard({Key? key, required this.movie, this.date}) : super(key: key);
 
   final MovieModel movie;
+  final DateTime? date;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class MovieCard extends StatelessWidget {
               PageTransition(
                   child: MovieCardPage(
                     movie: movie,
+                    date: date,
                   ),
                   type: PageTransitionType.bottomToTop,
                   duration: const Duration(milliseconds: 300)));

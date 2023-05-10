@@ -13,12 +13,14 @@ class MovieSessionsRepository {
 
   static const String _hostAPI = "https://fs-mt.qwerty123.tech";
 
-  final String _sessionsListURL = "$_hostAPI/api/sessions";
+  final String _sessionsListURL = "$_hostAPI/api/movies/sessions";
 
   Future<Map<String, dynamic>> dioGetSessions(
-      String movieId, String date) async {
+      String movieId, DateTime? date) async {
+    date ??= DateTime.now();
+    String dateString = "${date.year}-${date.month}-${date.day}";
     String sessionsListWithParametersURL =
-        "$_sessionsListURL?movieId=$movieId&date=$date";
+        "$_sessionsListURL?movieId=$movieId&date=$dateString";
     try {
       final response = await _dio.get(sessionsListWithParametersURL);
 

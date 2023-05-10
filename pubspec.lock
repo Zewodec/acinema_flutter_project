@@ -296,6 +296,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  responsive_grid:
+    dependency: "direct main"
+    description:
+      name: responsive_grid
+      sha256: f9848b31b78ba5084451596ecd30d35b8e3deb2f721d1df4718f1aae7f4b7c23
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   shared_preferences:
     dependency: "direct main"
     description:
