@@ -1,3 +1,4 @@
+import 'package:acinema_flutter_project/core/widgets/loading_screen.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/presentation/cubit/session_room_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,12 +41,13 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
         },
         builder: (context, state) {
           if (state is SessionRoomLoading) {
-            return const CircularProgressIndicator(
-              color: Colors.greenAccent,
-            );
+            return const LoadingScreen();
           } else if (state is SessionRoomLoaded) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context)
+                  .size
+                  .height, //TODO: Check this place for no error in debug
               child: RoomSessionWidget(
                 movieSessionModel: state.movieSessionModel,
               ),

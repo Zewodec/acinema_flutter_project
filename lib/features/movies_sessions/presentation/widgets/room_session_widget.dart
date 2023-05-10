@@ -1,6 +1,5 @@
 import 'package:acinema_flutter_project/features/movies_sessions/data/models/movie_sessions.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 
 class RoomSessionWidget extends StatefulWidget {
   const RoomSessionWidget({Key? key, required this.movieSessionModel})
@@ -15,38 +14,42 @@ class RoomSessionWidget extends StatefulWidget {
 class _RoomSessionWidgetState extends State<RoomSessionWidget> {
   @override
   Widget build(BuildContext context) {
-    return ResponsiveGridList(
-        rowMainAxisAlignment: MainAxisAlignment.center,
-        desiredItemWidth: 100,
-        minSpacing: 10,
-        children: [
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16,
-          17,
-          18,
-          19,
-          20
-        ].map((i) {
-          return Container(
-            height: ((i % 5) + 1) * 100.0,
-            alignment: const Alignment(0, 0),
-            color: Colors.cyan,
-            child: Text(i.toString()),
+    List<RoomRow> rows = widget.movieSessionModel.room.rows;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: rows.map((seatRow) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: seatRow.seats.map((seat) {
+              return SeatWidget(seat: seat);
+            }).toList(),
           );
-        }).toList());
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class SeatWidget extends StatelessWidget {
+  final Seat seat;
+
+  const SeatWidget({super.key, required this.seat});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = seat.isAvailable ? Colors.green : Colors.red;
+
+    return Container(
+      margin: const EdgeInsets.all(4),
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text('${seat.index}'),
+    );
   }
 }

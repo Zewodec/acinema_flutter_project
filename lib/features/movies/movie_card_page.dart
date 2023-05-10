@@ -161,7 +161,7 @@ class _MovieCardPageState extends State<MovieCardPage>
           const SizedBox(
             height: 24,
           ),
-          const RoomSessionSection(),
+          const Expanded(child: RoomSessionSection()),
         ],
       ),
     );
