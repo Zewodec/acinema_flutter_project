@@ -55,6 +55,30 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
                 const SizedBox(
                   height: 12,
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                            colors: [Colors.green, Colors.greenAccent],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                        border: Border.all(color: Colors.green)),
+                    child: const Center(
+                        child: Text(
+                      "SCREEN",
+                      style: TextStyle(
+                          fontFamily: "FixelText",
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
                 Expanded(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
