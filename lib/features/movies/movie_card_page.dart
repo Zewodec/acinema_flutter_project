@@ -73,7 +73,7 @@ class _MovieCardPageState extends State<MovieCardPage>
         body: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            _buildMovieSessionTab(widget.movie.id.toString(), widget.date),
+            _buildMovieSessionTab(widget.movie, widget.date),
             _buildMovieDescriptionTab(),
           ],
         ),
@@ -149,13 +149,23 @@ class _MovieCardPageState extends State<MovieCardPage>
     }
   }
 
-  Widget _buildMovieSessionTab(String movieId, DateTime? date) {
+  Widget _buildMovieSessionTab(MovieModel movieModel, DateTime? date) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 4),
+      padding: const EdgeInsets.only(top: 14, left: 4),
       child: Column(
         children: [
+          Text(
+            movieModel.name,
+            style: const TextStyle(
+                fontFamily: "FixelDisplay",
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 14,
+          ),
           DateSessionSection(
-            movieId: movieId,
+            movieId: movieModel.id.toString(),
             date: date,
           ),
           const SizedBox(

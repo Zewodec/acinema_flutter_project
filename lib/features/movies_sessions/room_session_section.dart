@@ -43,14 +43,32 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
           if (state is SessionRoomLoading) {
             return const LoadingScreen();
           } else if (state is SessionRoomLoaded) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context)
-                  .size
-                  .height, //TODO: Check this place for no error in debug
-              child: RoomSessionWidget(
-                movieSessionModel: state.movieSessionModel,
-              ),
+            return Column(
+              children: [
+                Text(
+                  state.movieSessionModel.room.name,
+                  style: const TextStyle(
+                      fontFamily: "FixelText",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context)
+                        .size
+                        .height, //TODO: Check this place for no error in debug
+                    child: Expanded(
+                      child: RoomSessionWidget(
+                        movieSessionModel: state.movieSessionModel,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             );
           }
           return const Text("Please, select date to show rooms!",
