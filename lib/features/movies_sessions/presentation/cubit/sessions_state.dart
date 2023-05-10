@@ -22,6 +22,11 @@ class SessionsLoaded extends SessionsState {
   List<Object?> get props => [sessions];
 }
 
+class SessionsRoomLoaded extends SessionsState {
+  @override
+  List<Object?> get props => [];
+}
+
 class SessionsError extends SessionsState {
   SessionsError(this.errorMessage);
 

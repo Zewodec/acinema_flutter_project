@@ -1,27 +1,27 @@
-import 'package:acinema_flutter_project/features/movies_sessions/data/repository/movie_sessions_repository.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/presentation/cubit/sessions_cubit.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/presentation/widgets/session_button_widget.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
-class SessionSection extends StatefulWidget {
-  const SessionSection({Key? key, required this.movieId, required this.date})
+class DateSessionSection extends StatefulWidget {
+  const DateSessionSection(
+      {Key? key, required this.movieId, required this.date})
       : super(key: key);
 
   final String movieId;
   final DateTime? date;
 
   @override
-  State<SessionSection> createState() => _SessionSectionState();
+  State<DateSessionSection> createState() => _DateSessionSectionState();
 }
 
-class _SessionSectionState extends State<SessionSection> {
+class _DateSessionSectionState extends State<DateSessionSection> {
   late SessionsCubit sessionsCubit;
 
   @override
   void initState() {
-    sessionsCubit = SessionsCubit(MovieSessionsRepository(Dio()));
+    sessionsCubit = GetIt.I<SessionsCubit>();
     sessionsCubit.loadSessionsForNext3Days(widget.movieId, widget.date);
     super.initState();
   }
@@ -59,6 +59,7 @@ class _SessionSectionState extends State<SessionSection> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 return SessionButtonWidget(
+                    type: state.sessions[index].type,
                     dateTime: DateTime.fromMillisecondsSinceEpoch(
                         state.sessions[index].date * 1000,
                         isUtc: true));

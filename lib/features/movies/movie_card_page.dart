@@ -3,6 +3,7 @@ import 'package:acinema_flutter_project/features/movies_sessions/sessions_sectio
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../movies_sessions/room_session_section.dart';
 import 'data/models/movie_model.dart';
 
 class MovieCardPage extends StatefulWidget {
@@ -147,13 +148,17 @@ class _MovieCardPageState extends State<MovieCardPage>
 
   Widget _buildMovieSessionTab(String movieId, DateTime? date) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, left: 4),
+      padding: const EdgeInsets.only(top: 20, left: 4),
       child: Column(
         children: [
-          SessionSection(
+          DateSessionSection(
             movieId: movieId,
             date: date,
           ),
+          const SizedBox(
+            height: 24,
+          ),
+          const RoomSessionSection(),
         ],
       ),
     );

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class SessionButtonWidget extends StatelessWidget {
   final DateTime dateTime;
+  final String type;
 
-  const SessionButtonWidget({Key? key, required this.dateTime})
+  const SessionButtonWidget(
+      {Key? key, required this.dateTime, required this.type})
       : super(key: key);
 
   @override
@@ -36,6 +38,10 @@ class SessionButtonWidget extends StatelessWidget {
                 fontFamily: "FixelDisplay",
                 color: Theme.of(context).colorScheme.onPrimaryContainer),
           ),
+          const SizedBox(
+            height: 4,
+          ),
+          Text("${type}"),
         ],
       ),
     );
