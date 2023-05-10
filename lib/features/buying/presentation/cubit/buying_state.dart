@@ -33,6 +33,10 @@ class BuyingSeatsState extends BuyingState {
 }
 
 class BuyingSuccessState extends BuyingState {
+  final bool buyResponse;
+
+  BuyingSuccessState(this.buyResponse);
+
   @override
   List<Object?> get props => [];
 }

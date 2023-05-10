@@ -2,6 +2,8 @@ import 'package:acinema_flutter_project/core/interceptors/accept_language_inters
 import 'package:acinema_flutter_project/core/interceptors/authorization_interceptor.dart';
 import 'package:dio/dio.dart';
 
+import '../../../movies_sessions/data/models/movie_sessions.dart';
+
 class BuyingRepository {
   BuyingRepository(this._dio) {
     _dio.interceptors
@@ -16,9 +18,13 @@ class BuyingRepository {
   final String _bookURL = "$_hostAPI/api/movies/book";
 
   Future<Map<String, dynamic>> dioBookSeats(
-      List<int> seats, int sessionId) async {
+      List<Seat> seats, int sessionId) async {
+    List<int> seatsIds = [];
+    for (Seat seat in seats) {
+      seatsIds.add(seat.id);
+    }
     Map<String, dynamic> bookData = {
-      "seats": seats,
+      "seats": seatsIds,
       "sessionId": sessionId,
     };
     try {

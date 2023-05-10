@@ -113,23 +113,32 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
                         color: Colors.greenAccent,
                       );
                     } else if (state2 is BookingSuccessSeatsState) {
-                      Future.delayed(const Duration(seconds: 1))
-                          .then((value) => Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: BuyingPage(
-                                    movieSessionModel: state.movieSessionModel,
-                                    movie: widget.movie,
-                                    sessionTickets:
-                                        BlocProvider.of<BuyingCubit>(context)
-                                            .selectedSeatsText,
-                                  ),
-                                  type: PageTransitionType.leftToRight)));
-                      return const Text(
-                        "Successful booking tickets!",
-                        style: TextStyle(
-                            fontFamily: "FixelText", color: Colors.green),
-                      );
+                      if (state2.bookResponse) {
+                        Future.delayed(const Duration(seconds: 1))
+                            .then((value) => Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: BuyingPage(
+                                      movieSessionModel:
+                                          state.movieSessionModel,
+                                      movie: widget.movie,
+                                      sessionTickets:
+                                          BlocProvider.of<BuyingCubit>(context)
+                                              .selectedSeats,
+                                    ),
+                                    type: PageTransitionType.leftToRight)));
+                        return const Text(
+                          "Successful booking tickets!",
+                          style: TextStyle(
+                              fontFamily: "FixelText", color: Colors.green),
+                        );
+                      } else {
+                        return const Text(
+                          "Unsuccessful booking tickets!",
+                          style: TextStyle(
+                              fontFamily: "FixelText", color: Colors.redAccent),
+                        );
+                      }
                     } else if (state2 is BuyingErrorState) {
                       return const Text(
                         "Error booking tickets!",

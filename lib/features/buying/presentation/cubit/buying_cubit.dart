@@ -1,4 +1,5 @@
 import 'package:acinema_flutter_project/features/buying/data/repository/buying_repository.dart';
+import 'package:acinema_flutter_project/features/movies_sessions/data/models/movie_sessions.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
@@ -8,9 +9,20 @@ part 'buying_state.dart';
 class BuyingCubit extends Cubit<BuyingState> {
   BuyingCubit(this.repository) : super(BuyingInitial());
 
-  List<int> selectedSeats = [];
+  List<Seat> selectedSeats = [];
   int sessionId = 0;
-  Map<int, String> selectedSeatsText = {};
+
+  void clearSeats() {
+    selectedSeats.clear();
+  }
+
+  List<int> selectedSeatsIds() {
+    List<int> result = [];
+    for (Seat seat in selectedSeats) {
+      result.add(seat.id);
+    }
+    return result;
+  }
 
   final BuyingRepository repository;
 
@@ -18,17 +30,15 @@ class BuyingCubit extends Cubit<BuyingState> {
     this.sessionId = sessionId;
   }
 
-  void addSelectedSeat(int seatId, String seatPositionText) {
-    selectedSeats.add(seatId);
-    selectedSeatsText.addAll({sessionId: seatPositionText});
+  void addSelectedSeat(Seat seat) {
+    selectedSeats.add(seat);
     if (selectedSeats.isNotEmpty) {
       emit(BookSeatsReadyState());
     }
   }
 
-  void removeSelectedSeat(int seatId, String seatPosition) {
-    selectedSeats.remove(seatId);
-    selectedSeatsText.remove({sessionId});
+  void removeSelectedSeat(Seat seat) {
+    selectedSeats.remove(seat);
     if (selectedSeats.length <= 1) {
       emit(BuyingInitial());
     }
@@ -42,6 +52,21 @@ class BuyingCubit extends Cubit<BuyingState> {
       return;
     }
     emit(BookingSuccessSeatsState(gotBookResponse['data']));
+    Future.delayed(const Duration(seconds: 3))
+        .then((value) => emit(BuyingInitial()));
+  }
+
+  void buySeats(
+      String email, String cardNumber, String exprationDate, String cvv) async {
+    emit(BuyingSeatsState());
+    Map<String, dynamic> gotBuyResponse = await repository.dioBuySeats(
+        selectedSeatsIds(), sessionId, email, cardNumber, exprationDate, cvv);
+    if (isErrorInData(gotBuyResponse)) {
+      return;
+    }
+    emit(BuyingSuccessState(gotBuyResponse['data']));
+    Future.delayed(const Duration(seconds: 3))
+        .then((value) => emit(BuyingInitial()));
   }
 
   bool isErrorInData(Map<String, dynamic> sessionsData) {

@@ -1,7 +1,6 @@
 import 'package:acinema_flutter_project/features/movies/data/repository/movie_repository.dart';
 import 'package:acinema_flutter_project/features/movies/presentation/cubit/movies_cubit.dart';
 import 'package:acinema_flutter_project/features/movies/presentation/widgets/movie_card.dart';
-import 'package:acinema_flutter_project/features/movies_sessions/data/repository/movie_sessions_repository.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/presentation/cubit/sessions_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,6 @@ class _MoviesPageState extends State<MoviesPage> {
 
   @override
   void initState() {
-    GetIt.I.registerSingleton<SessionsCubit>(
-        SessionsCubit(MovieSessionsRepository(Dio())));
     _searchFieldController = TextEditingController();
     moviesCubit = MoviesCubit(MovieRepository(Dio()));
     moviesCubit.loadMovies();
