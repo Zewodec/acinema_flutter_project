@@ -54,10 +54,9 @@ class SessionsCubit extends Cubit<SessionsState> {
     int milisecSinceEpoch = date.millisecondsSinceEpoch;
     int currentTimeStamp = (milisecSinceEpoch / 1000).floor();
 
-    sessions.data.removeWhere(
-        (element) => element.date < currentTimeStamp ? true : false);
-
     sessions.sortFromNewToOld();
+    sessions.data.removeWhere(
+        (element) => (element.date < currentTimeStamp) ? true : false);
 
     emit(SessionsLoaded(sessions.data));
   }

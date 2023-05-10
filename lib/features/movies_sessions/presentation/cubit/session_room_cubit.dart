@@ -13,4 +13,8 @@ class SessionRoomCubit extends Cubit<SessionRoomState> {
     Future.delayed(const Duration(seconds: 1))
         .then((value) => emit(SessionRoomLoaded(movieSessionModel)));
   }
+
+  void loadStartState() {
+    emit(SessionRoomInitial());
+  }
 }

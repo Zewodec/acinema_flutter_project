@@ -1,6 +1,8 @@
 import 'package:acinema_flutter_project/features/movies/presentation/widgets/movie_description_widget.dart';
+import 'package:acinema_flutter_project/features/movies_sessions/presentation/cubit/session_room_cubit.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/sessions_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../movies_sessions/room_session_section.dart';
@@ -29,6 +31,7 @@ class _MovieCardPageState extends State<MovieCardPage>
   @override
   void dispose() {
     _tabController.dispose();
+    GetIt.I.get<SessionRoomCubit>().loadStartState();
     super.dispose();
   }
 

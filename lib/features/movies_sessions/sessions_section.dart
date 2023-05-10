@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import 'presentation/cubit/session_room_cubit.dart';
+
 class DateSessionSection extends StatefulWidget {
   const DateSessionSection(
       {Key? key, required this.movieId, required this.date})
@@ -18,11 +20,13 @@ class DateSessionSection extends StatefulWidget {
 
 class _DateSessionSectionState extends State<DateSessionSection> {
   late SessionsCubit sessionsCubit;
+  late SessionRoomCubit sessionRoomCubit;
 
   @override
   void initState() {
     sessionsCubit = GetIt.I<SessionsCubit>();
     sessionsCubit.loadSessionsForNext3Days(widget.movieId, widget.date);
+    sessionRoomCubit = GetIt.I.get<SessionRoomCubit>();
     super.initState();
   }
 
@@ -59,7 +63,7 @@ class _DateSessionSectionState extends State<DateSessionSection> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 return SessionButtonWidget(
-                    type: state.sessions[index].type,
+                    movieSessionModel: state.sessions[index],
                     dateTime: DateTime.fromMillisecondsSinceEpoch(
                         state.sessions[index].date * 1000,
                         isUtc: true));

@@ -4,6 +4,9 @@ import 'package:acinema_flutter_project/features/login/login_page.dart';
 import 'package:acinema_flutter_project/features/movies/movies_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
+import '../features/movies_sessions/presentation/cubit/session_room_cubit.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({Key? key}) : super(key: key);
@@ -17,6 +20,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   void initState() {
+    GetIt.I.registerSingleton<SessionRoomCubit>(SessionRoomCubit());
     authCubit = AuthCubit();
     authCubit.checkIfUserAuthorized();
     super.initState();

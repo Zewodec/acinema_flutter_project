@@ -72,7 +72,7 @@ class MovieSessionModel {
 class Room {
   int id;
   String name;
-  List<Row> rows;
+  List<RoomRow> rows;
 
   Room({
     required this.id,
@@ -83,7 +83,7 @@ class Room {
   factory Room.fromJson(Map<String, dynamic> json) => Room(
         id: json["id"],
         name: json["name"],
-        rows: List<Row>.from(json["rows"].map((x) => Row.fromJson(x))),
+        rows: List<RoomRow>.from(json["rows"].map((x) => RoomRow.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,18 +93,18 @@ class Room {
       };
 }
 
-class Row {
+class RoomRow {
   int id;
   int index;
   List<Seat> seats;
 
-  Row({
+  RoomRow({
     required this.id,
     required this.index,
     required this.seats,
   });
 
-  factory Row.fromJson(Map<String, dynamic> json) => Row(
+  factory RoomRow.fromJson(Map<String, dynamic> json) => RoomRow(
         id: json["id"],
         index: json["index"],
         seats: List<Seat>.from(json["seats"].map((x) => Seat.fromJson(x))),
