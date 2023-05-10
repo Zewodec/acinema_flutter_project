@@ -1,4 +1,6 @@
+import 'package:acinema_flutter_project/features/buying/presentation/cubit/buying_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/movie_sessions.dart';
 
@@ -39,6 +41,13 @@ class _SeatWidgetState extends State<SeatWidget> {
           setState(() {
             isSelected = !isSelected;
           });
+          if (isSelected) {
+            BlocProvider.of<BuyingCubit>(context).addSelectedSeat(
+                widget.seat.id, '${widget.row}-${widget.seat.index}');
+          } else {
+            BlocProvider.of<BuyingCubit>(context).removeSelectedSeat(
+                widget.seat.id, '${widget.row}-${widget.seat.index}');
+          }
         }
       },
       child: Container(

@@ -1,13 +1,18 @@
 import 'package:acinema_flutter_project/core/widgets/loading_screen.dart';
+import 'package:acinema_flutter_project/features/buying/buying_page.dart';
+import 'package:acinema_flutter_project/features/buying/presentation/cubit/buying_cubit.dart';
+import 'package:acinema_flutter_project/features/movies/data/models/movie_model.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/presentation/cubit/session_room_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'presentation/widgets/room_session_widget.dart';
 
 class RoomSessionSection extends StatefulWidget {
-  const RoomSessionSection({Key? key}) : super(key: key);
+  const RoomSessionSection({Key? key, required this.movie}) : super(key: key);
+  final MovieModel movie;
 
   @override
   State<RoomSessionSection> createState() => _RoomSessionSectionState();
@@ -43,6 +48,8 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
           if (state is SessionRoomLoading) {
             return const LoadingScreen();
           } else if (state is SessionRoomLoaded) {
+            BlocProvider.of<BuyingCubit>(context)
+                .setSessionId(state.movieSessionModel.id);
             return Column(
               children: [
                 Text(
@@ -66,14 +73,15 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
                             end: Alignment.bottomCenter),
                         border: Border.all(color: Colors.green)),
                     child: const Center(
-                        child: Text(
-                      "SCREEN",
-                      style: TextStyle(
-                          fontFamily: "FixelText",
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    )),
+                      child: Text(
+                        "SCREEN",
+                        style: TextStyle(
+                            fontFamily: "FixelText",
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -91,6 +99,46 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
                       ),
                     ),
                   ),
+                ),
+                BlocBuilder<BuyingCubit, BuyingState>(
+                  builder: (context, state2) {
+                    if (state2 is BookSeatsReadyState) {
+                      return ElevatedButton(
+                          onPressed: () {
+                            BlocProvider.of<BuyingCubit>(context).bookSeat();
+                          },
+                          child: const Text("Book Seats"));
+                    } else if (state2 is BookingSeatsState) {
+                      return const CircularProgressIndicator(
+                        color: Colors.greenAccent,
+                      );
+                    } else if (state2 is BookingSuccessSeatsState) {
+                      Future.delayed(const Duration(seconds: 1))
+                          .then((value) => Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: BuyingPage(
+                                    movieSessionModel: state.movieSessionModel,
+                                    movie: widget.movie,
+                                    sessionTickets:
+                                        BlocProvider.of<BuyingCubit>(context)
+                                            .selectedSeatsText,
+                                  ),
+                                  type: PageTransitionType.leftToRight)));
+                      return const Text(
+                        "Successful booking tickets!",
+                        style: TextStyle(
+                            fontFamily: "FixelText", color: Colors.green),
+                      );
+                    } else if (state2 is BuyingErrorState) {
+                      return const Text(
+                        "Error booking tickets!",
+                        style: TextStyle(
+                            fontFamily: "FixelText", color: Colors.green),
+                      );
+                    }
+                    return const Text("Select Seats to book and buy!");
+                  },
                 ),
               ],
             );

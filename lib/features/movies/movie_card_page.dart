@@ -1,7 +1,9 @@
+import 'package:acinema_flutter_project/features/buying/presentation/cubit/buying_cubit.dart';
 import 'package:acinema_flutter_project/features/movies/presentation/widgets/movie_description_widget.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/presentation/cubit/session_room_cubit.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/sessions_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -98,7 +100,7 @@ class _MovieCardPageState extends State<MovieCardPage>
                           borderRadius: BorderRadius.all(Radius.circular(10))),
                       fixedSize: const Size(100, 50),
                       backgroundColor:
-                          Theme.of(context).colorScheme.tertiaryContainer),
+                      Theme.of(context).colorScheme.tertiaryContainer),
                   onPressed: () => _launchTrailerUrl(
                       context, Uri.parse(widget.movie.trailer)),
                   child: Row(
@@ -107,7 +109,7 @@ class _MovieCardPageState extends State<MovieCardPage>
                       Icon(
                         Icons.camera_indoor,
                         color:
-                            Theme.of(context).colorScheme.onTertiaryContainer,
+                        Theme.of(context).colorScheme.onTertiaryContainer,
                       ),
                       Text(
                         "Watch Trailer!",
@@ -150,29 +152,35 @@ class _MovieCardPageState extends State<MovieCardPage>
   }
 
   Widget _buildMovieSessionTab(MovieModel movieModel, DateTime? date) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 14, left: 4),
-      child: Column(
-        children: [
-          Text(
-            movieModel.name,
-            style: const TextStyle(
-                fontFamily: "FixelDisplay",
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 14,
-          ),
-          DateSessionSection(
-            movieId: movieModel.id.toString(),
-            date: date,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          const Expanded(child: RoomSessionSection()),
-        ],
+    return BlocProvider(
+      create: (context) => GetIt.I.get<BuyingCubit>(),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 14, left: 4),
+        child: Column(
+          children: [
+            Text(
+              movieModel.name,
+              style: const TextStyle(
+                  fontFamily: "FixelDisplay",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 14,
+            ),
+            DateSessionSection(
+              movieId: movieModel.id.toString(),
+              date: date,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Expanded(
+                child: RoomSessionSection(
+              movie: widget.movie,
+            )),
+          ],
+        ),
       ),
     );
   }

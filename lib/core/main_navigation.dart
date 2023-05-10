@@ -1,11 +1,14 @@
 import 'package:acinema_flutter_project/core/widgets/loading_screen.dart';
 import 'package:acinema_flutter_project/features/auth/cubit/auth_cubit.dart';
+import 'package:acinema_flutter_project/features/buying/presentation/cubit/buying_cubit.dart';
 import 'package:acinema_flutter_project/features/login/login_page.dart';
 import 'package:acinema_flutter_project/features/movies/movies_page.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/buying/data/repository/buying_repository.dart';
 import '../features/movies_sessions/presentation/cubit/session_room_cubit.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -21,6 +24,8 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   void initState() {
     GetIt.I.registerSingleton<SessionRoomCubit>(SessionRoomCubit());
+    GetIt.I
+        .registerSingleton<BuyingCubit>(BuyingCubit(BuyingRepository(Dio())));
     authCubit = AuthCubit();
     authCubit.checkIfUserAuthorized();
     super.initState();
