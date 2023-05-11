@@ -48,7 +48,6 @@ class DebitCardWidget extends StatelessWidget {
                     const Text(
                       'Debit Card',
                       style: TextStyle(
-                        color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -56,16 +55,10 @@ class DebitCardWidget extends StatelessWidget {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _cardNumberController,
-                      style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         labelText: 'Card Number',
-                        labelStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
+                        enabledBorder: UnderlineInputBorder(),
+                        focusedBorder: UnderlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -81,16 +74,10 @@ class DebitCardWidget extends StatelessWidget {
                           width: 100,
                           child: TextFormField(
                             controller: _expiryDateController,
-                            style: const TextStyle(color: Colors.white),
                             decoration: const InputDecoration(
                               labelText: 'Expiry Date',
-                              labelStyle: TextStyle(color: Colors.white),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
+                              enabledBorder: UnderlineInputBorder(),
+                              focusedBorder: UnderlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -105,16 +92,10 @@ class DebitCardWidget extends StatelessWidget {
                           width: 100,
                           child: TextFormField(
                             controller: _cvvController,
-                            style: const TextStyle(color: Colors.white),
                             decoration: const InputDecoration(
                               labelText: 'CVV',
-                              labelStyle: TextStyle(color: Colors.white),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
+                              enabledBorder: UnderlineInputBorder(),
+                              focusedBorder: UnderlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -132,16 +113,10 @@ class DebitCardWidget extends StatelessWidget {
               const SizedBox(height: 24),
               TextFormField(
                 controller: _emailController,
-                style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
                   labelText: 'Email',
-                  labelStyle: TextStyle(color: Colors.white),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
+                  enabledBorder: UnderlineInputBorder(),
+                  focusedBorder: UnderlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {

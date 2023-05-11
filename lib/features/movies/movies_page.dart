@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../user/user_page.dart';
+
 class MoviesPage extends StatefulWidget {
   const MoviesPage({Key? key}) : super(key: key);
 
@@ -178,10 +180,10 @@ class _MoviesPageState extends State<MoviesPage> {
               ListTile(
                 title: const Text('My Profile'),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => NewPage()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
                 },
               ),
             ],

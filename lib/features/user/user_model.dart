@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-UserImpl userImplFromJson(String str) => UserImpl.fromJson(json.decode(str));
+UserModelImpl userImplFromJson(String str) =>
+    UserModelImpl.fromJson(json.decode(str));
 
-String userImplToJson(UserImpl data) => json.encode(data.toJson());
+String userImplToJson(UserModelImpl data) => json.encode(data.toJson());
 
-class UserImpl {
+class UserModelImpl {
   UserModel data;
 
-  UserImpl({
+  UserModelImpl({
     required this.data,
   });
 
-  factory UserImpl.fromJson(Map<String, dynamic> json) => UserImpl(
+  factory UserModelImpl.fromJson(Map<String, dynamic> json) => UserModelImpl(
         data: UserModel.fromJson(json["data"]),
       );
 
@@ -36,9 +37,9 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        id: json["id"],
-        name: json["name"],
-        phoneNumber: json["phoneNumber"],
+    id: json["id"],
+        name: json["name"] ?? "No Name",
+        phoneNumber: json["phoneNumber"] ?? "No Phone Number",
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
       );
