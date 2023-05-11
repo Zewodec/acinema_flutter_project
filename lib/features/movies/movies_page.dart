@@ -1,7 +1,10 @@
+import 'package:acinema_flutter_project/features/buying/data/repository/buying_repository.dart';
+import 'package:acinema_flutter_project/features/buying/presentation/cubit/buying_cubit.dart';
 import 'package:acinema_flutter_project/features/movies/data/repository/movie_repository.dart';
 import 'package:acinema_flutter_project/features/movies/presentation/cubit/movies_cubit.dart';
 import 'package:acinema_flutter_project/features/movies/presentation/widgets/movie_card.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/presentation/cubit/sessions_cubit.dart';
+import 'package:acinema_flutter_project/features/tickets/user_ticket_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +21,7 @@ class _MoviesPageState extends State<MoviesPage> {
   late MoviesCubit moviesCubit;
   late TextEditingController _searchFieldController;
   late SessionsCubit sessionsCubit;
+  late BuyingCubit buyingCubit;
 
   @override
   void initState() {
@@ -25,6 +29,9 @@ class _MoviesPageState extends State<MoviesPage> {
     moviesCubit = MoviesCubit(MovieRepository(Dio()));
     moviesCubit.loadMovies();
     sessionsCubit = GetIt.I.get<SessionsCubit>();
+    buyingCubit = BuyingCubit(BuyingRepository(Dio()));
+    GetIt.I.unregister<BuyingCubit>();
+    GetIt.I.registerSingleton<BuyingCubit>(buyingCubit);
     super.initState();
   }
 
@@ -47,15 +54,15 @@ class _MoviesPageState extends State<MoviesPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () async {
-                DateTime? newDate = await showDatePicker(
-                    context: context,
+            onPressed: () async {
+              DateTime? newDate = await showDatePicker(
+                  context: context,
                   initialDate: dateTime,
                   firstDate: DateTime(2023, 05, 01),
                   lastDate: DateTime(2025));
-                if (newDate == null) {
-                  moviesCubit.loadMoviesWithDateOrName(
-                      null, _searchFieldController.text);
+              if (newDate == null) {
+                moviesCubit.loadMoviesWithDateOrName(
+                    null, _searchFieldController.text);
                 return;
               }
 
@@ -97,10 +104,10 @@ class _MoviesPageState extends State<MoviesPage> {
             listener: (context, state) {
               if (state is MoviesError) {
                 Future.delayed(const Duration(seconds: 1)).then(
-                  (value) => ScaffoldMessenger.of(context).showSnackBar(
+                      (value) => ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor:
-                          Theme.of(context).colorScheme.errorContainer,
+                      Theme.of(context).colorScheme.errorContainer,
                       content: Text(
                         "MoviesError State:${state.errorMessage}",
                         style: const TextStyle(
@@ -149,6 +156,37 @@ class _MoviesPageState extends State<MoviesPage> {
             },
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 12,
+              ),
+              ListTile(
+                title: const Text('My Tickets'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UserTicketPage()),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('My Profile'),
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => NewPage()),
+                  // );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

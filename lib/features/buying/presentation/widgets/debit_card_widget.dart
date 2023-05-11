@@ -159,6 +159,13 @@ class DebitCardWidget extends StatelessWidget {
                         color: Colors.greenAccent,
                       );
                     } else if (state is BuyingSuccessState) {
+                      Future.delayed(const Duration(seconds: 3))
+                          .then((value) => Navigator.of(context)
+                              .popUntil((route) => route.isFirst))
+                          .then((value) => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const MoviesPage())));
                       return const Text("Have a good time!");
                     }
                     return const Text("Enter your card data!");
@@ -196,14 +203,7 @@ class DebitCardWidget extends StatelessWidget {
             _cardNumberController.clear();
             _expiryDateController.clear();
             _cvvController.clear();
-
-            Future.delayed(const Duration(seconds: 3))
-                .then((value) => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MoviesPage(),
-                      ),
-                    ));
+            _emailController.clear();
           }
         },
         child: const Text('Submit'),

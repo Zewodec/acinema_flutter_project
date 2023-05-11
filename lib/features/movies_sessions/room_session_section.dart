@@ -24,6 +24,11 @@ class _RoomSessionSectionState extends State<RoomSessionSection> {
   @override
   void initState() {
     sessionRoomCubit = GetIt.I.get<SessionRoomCubit>();
+    if (sessionRoomCubit.isClosed) {
+      GetIt.I.unregister(instance: SessionRoomCubit);
+      GetIt.I.registerSingleton<SessionRoomCubit>(SessionRoomCubit());
+      sessionRoomCubit = GetIt.I.get<SessionRoomCubit>();
+    }
     super.initState();
   }
 
