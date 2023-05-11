@@ -34,6 +34,19 @@ class _SeatWidgetState extends State<SeatWidget> {
         ? Theme.of(context).colorScheme.onPrimary
         : Theme.of(context).colorScheme.onErrorContainer;
 
+    IconData iconType = Icons.chair_alt;
+    switch (widget.seat.type) {
+      case 0:
+        iconType = Icons.chair_alt;
+        break;
+      case 1:
+        iconType = Icons.star;
+        break;
+      case 2:
+        iconType = Icons.chair;
+        break;
+    }
+
     return InkWell(
       splashColor: Colors.amber,
       onTap: () {
@@ -42,11 +55,10 @@ class _SeatWidgetState extends State<SeatWidget> {
             isSelected = !isSelected;
           });
           if (isSelected) {
-            BlocProvider.of<BuyingCubit>(context).addSelectedSeat(
-                widget.seat.id, '${widget.row}-${widget.seat.index}');
+            BlocProvider.of<BuyingCubit>(context).addSelectedSeat(widget.seat);
           } else {
-            BlocProvider.of<BuyingCubit>(context).removeSelectedSeat(
-                widget.seat.id, '${widget.row}-${widget.seat.index}');
+            BlocProvider.of<BuyingCubit>(context)
+                .removeSelectedSeat(widget.seat);
           }
         }
       },
@@ -59,10 +71,19 @@ class _SeatWidgetState extends State<SeatWidget> {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Center(
-          child: Text(
-            '${widget.row}-${widget.seat.index}',
-            style: TextStyle(
-                fontFamily: 'FixelText', color: textColor, fontSize: 16),
+          child: Column(
+            children: [
+              Icon(
+                iconType,
+                color: Colors.deepOrangeAccent,
+                size: 15,
+              ),
+              Text(
+                '${widget.row}-${widget.seat.index}',
+                style: TextStyle(
+                    fontFamily: 'FixelText', color: textColor, fontSize: 16),
+              ),
+            ],
           ),
         ),
       ),

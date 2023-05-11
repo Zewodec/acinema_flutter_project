@@ -26,8 +26,14 @@ class SessionsCubit extends Cubit<SessionsState> {
     emit(SessionsLoaded(sessions.data));
   }
 
+  String lastMovieId = "";
+  DateTime? lastDateTime = DateTime.now();
+
   void loadSessionsForNext3Days(String movieId, DateTime? date) async {
     emit(SessionsLoading());
+
+    lastMovieId = movieId;
+    lastDateTime = date;
 
     Map<String, dynamic> sessionsData = {};
 
@@ -74,5 +80,9 @@ class SessionsCubit extends Cubit<SessionsState> {
       return true;
     }
     return false;
+  }
+
+  void loadSessionsForNext3DaysLast() {
+    loadSessionsForNext3Days(lastMovieId, lastDateTime);
   }
 }

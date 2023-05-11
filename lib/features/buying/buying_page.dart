@@ -1,6 +1,8 @@
 import 'package:acinema_flutter_project/features/buying/presentation/widgets/buying_ticket_widget.dart';
+import 'package:acinema_flutter_project/features/buying/presentation/widgets/debit_card_widget.dart';
 import 'package:acinema_flutter_project/features/movies_sessions/data/models/movie_sessions.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../movies/data/models/movie_model.dart';
 
@@ -14,13 +16,23 @@ class BuyingPage extends StatefulWidget {
 
   final MovieSessionModel movieSessionModel;
   final MovieModel movie;
-  final Map<int, String> sessionTickets;
+  final List<Seat> sessionTickets;
 
   @override
   State<BuyingPage> createState() => _BuyingPageState();
 }
 
 class _BuyingPageState extends State<BuyingPage> {
+  double totalPrice = 0;
+
+  @override
+  void initState() {
+    for (Seat seat in widget.sessionTickets) {
+      totalPrice += seat.price;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,12 +54,64 @@ class _BuyingPageState extends State<BuyingPage> {
               const SizedBox(
                 height: 25,
               ),
-              ListView.builder(
-                  itemCount: widget.sessionTickets.length,
-                  itemBuilder: (context, index) {
-                    return BuyingTicketWidget(
-                        ticket: widget.sessionTickets, index: index);
-                  })
+              Expanded(
+                child: ListView.builder(
+                    itemCount: widget.sessionTickets.length,
+                    itemBuilder: (context, index) {
+                      int row = 1;
+                      for (int i = 0;
+                          i < widget.movieSessionModel.room.rows.length;
+                          i++) {
+                        for (int j = 0;
+                            j <
+                                widget.movieSessionModel.room.rows[i].seats
+                                    .length;
+                            j++) {
+                          if (widget
+                                  .movieSessionModel.room.rows[i].seats[j].id ==
+                              widget.sessionTickets[index].id) {
+                            row = i + 1;
+                          }
+                        }
+                      }
+                      return BuyingTicketWidget(
+                          cinema: widget.movieSessionModel.room.name,
+                          seat: widget.sessionTickets[index].index.toString(),
+                          row: row.toString(),
+                          price: widget.sessionTickets[index].price.toDouble());
+                    }),
+              ),
+            ],
+          ),
+        ),
+        bottomSheet: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Row(
+            children: [
+              Text(
+                "Total: $totalPrice₴",
+                style: TextStyle(
+                    fontFamily: "FixelDisplay",
+                    fontSize: 20,
+                    color: Theme.of(context).colorScheme.tertiary),
+              ),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: DebitCardWidget(),
+                          type: PageTransitionType.rightToLeft));
+                },
+                child: const Text(
+                  "Buy Tickets!",
+                  style: TextStyle(
+                    fontFamily: "FixelDisplay",
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

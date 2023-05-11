@@ -29,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     getIt.registerSingleton<LoginRepository>(
         LoginRepository(Dio()..interceptors.add(AcceptLanguageInterceptor())));
     loginCubit = LoginCubit(GetIt.I<LoginRepository>());
+    loginCubit.signIn();
     super.initState();
   }
 
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 30,
                 ),
               ),
-              const SizedBox(
+              /*const SizedBox(
                 height: 30,
               ),
               SizedBox(
@@ -111,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                         Icon(Icons.phone)
                       ],
                     )),
-              ),
+              ),*/
               const SizedBox(height: 15),
               SizedBox(
                 width: 200,
@@ -119,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: OutlinedButton(
                   onPressed: () => {loginCubit.signIn()},
                   child: const Text(
-                    "Sign in as guest ",
+                    "Sign in as guest",
                     style: TextStyle(fontFamily: "FixelText", fontSize: 12),
                     textAlign: TextAlign.center,
                   ),

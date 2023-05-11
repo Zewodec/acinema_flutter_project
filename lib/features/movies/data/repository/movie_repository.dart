@@ -16,8 +16,10 @@ class MovieRepository {
   final String _moviesListURL = "$_hostAPI/api/movies";
 
   Future<Map<String, dynamic>> dioGetAllMovies() async {
+    DateTime dateTime = DateTime.now();
     try {
-      final response = await _dio.get(_moviesListURL);
+      final response = await _dio.get(
+          "$_moviesListURL?date=${dateTime.year}-${dateTime.month}-${dateTime.day}");
 
       if (response.statusCode == 200) {
         return response.data;

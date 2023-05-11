@@ -9,7 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/buying/data/repository/buying_repository.dart';
+import '../features/movies_sessions/data/repository/movie_sessions_repository.dart';
 import '../features/movies_sessions/presentation/cubit/session_room_cubit.dart';
+import '../features/movies_sessions/presentation/cubit/sessions_cubit.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({Key? key}) : super(key: key);
@@ -26,6 +28,8 @@ class _MainNavigationState extends State<MainNavigation> {
     GetIt.I.registerSingleton<SessionRoomCubit>(SessionRoomCubit());
     GetIt.I
         .registerSingleton<BuyingCubit>(BuyingCubit(BuyingRepository(Dio())));
+    GetIt.I.registerSingleton<SessionsCubit>(
+        SessionsCubit(MovieSessionsRepository(Dio())));
     authCubit = AuthCubit();
     authCubit.checkIfUserAuthorized();
     super.initState();
