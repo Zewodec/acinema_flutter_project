@@ -36,7 +36,6 @@ jobs:
       - run: flutter pub get
       - run: flutter clean
       - run: flutter build apk
-      - name: Upload a Build Artifact
       - uses: actions/upload-artifact@v3.1.2
         with:
           path: "build/app/outputs/flutter-apk/app-release.apk"
