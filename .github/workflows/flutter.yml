@@ -28,8 +28,8 @@ jobs:
         run: flutter pub get
       - name: Build Apk
         run: flutter build apk
-#       - name: Upload a Build apk artifact
-#         uses: actions/upload-artifact@v3.1.2
-#         with:
-#           name: apk-artifact
-#           path: 
+      - name: Upload a Build apk artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: apk-artifact
+          path: build/app/outputs/flutter-apk/app-release.apk
