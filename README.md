@@ -1,16 +1,16 @@
-# acinema_flutter_project
+# ACinema Flutter Project
 
-Flutter project for empat school
+Flutter project for empat school ♥
 
-## Getting Started
+## Start
+![App presentation](https://github.com/Zewodec/acinema_flutter_project/assets/35268127/1649403e-1b6d-46dd-9ac6-754c6f60a19e)
 
-This project is a starting point for a Flutter application.
+### Packages
+![Packages](https://github.com/Zewodec/acinema_flutter_project/assets/35268127/bedf6bcf-e110-43ea-b00e-58ef239d6149)
 
-A few resources to get you started if this is your first Flutter project:
+### Look like
+![App looks](https://github.com/Zewodec/acinema_flutter_project/assets/35268127/032838b8-dcf0-4f6b-b48a-45a802aa0483)
+![Tickets looks](https://github.com/Zewodec/acinema_flutter_project/assets/35268127/9d7ad90d-3ad5-47fd-9257-74838fb46ec9)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### State logic
+![State logic diagram](https://github.com/Zewodec/acinema_flutter_project/assets/35268127/f5fb0a37-85f1-4d9c-acb6-ae490cbc828c)
