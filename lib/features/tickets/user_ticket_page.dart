@@ -33,7 +33,18 @@ class _UserTicketPageState extends State<UserTicketPage> {
       body: BlocConsumer<TicketsCubit, TicketsState>(
         bloc: ticketsCubit,
         listener: (context, state) {
-          // TODO: implement listener
+          if (state is TicketsError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(
+                    state.message,
+                    style: TextStyle(
+                        fontFamily: "FixelText",
+                        color: Theme.of(context).colorScheme.onError),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.error),
+            );
+          }
         },
         builder: (context, state) {
           if (state is TicketsLoading) {

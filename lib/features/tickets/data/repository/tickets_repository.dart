@@ -17,7 +17,6 @@ class TicketsRepository {
   final String _ticketsListURL = "$_hostAPI/api/user/tickets";
 
   Future<Map<String, dynamic>> dioGetUserTickets() async {
-    DateTime dateTime = DateTime.now();
     try {
       final response = await _dio.get(_ticketsListURL);
 

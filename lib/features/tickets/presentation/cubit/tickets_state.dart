@@ -21,3 +21,12 @@ class TicketsLoaded extends TicketsState {
   @override
   List<Object?> get props => [];
 }
+
+class TicketsError extends TicketsState {
+  TicketsError(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => [];
+}

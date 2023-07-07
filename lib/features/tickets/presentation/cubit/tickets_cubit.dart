@@ -15,6 +15,12 @@ class TicketsCubit extends Cubit<TicketsState> {
   void loadTickets() async {
     emit(TicketsLoading());
     final ticketsData = await repository.dioGetUserTickets();
+
+    if (ticketsData.containsKey("error")) {
+      emit(TicketsError(ticketsData["error"]));
+      return;
+    }
+
     final tickets = UserTicketsImpl.fromJson(ticketsData);
     emit(TicketsLoaded(tickets.data));
   }
